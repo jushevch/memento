@@ -1,0 +1,131 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Memento MUD</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="js/jquery-3.5.1.slim.min.js"></script>
+    <script src="js/signalr/dist/browser/signalr.min.js"></script>
+</head>
+<body>
+
+    <button id="start">Играть</button>
+
+    <div id="console"></div>
+
+    <input id="input" type="text">
+
+    <script>
+        $(function()
+        {
+            /* Setup */
+
+            const hubConnection = new signalR.HubConnectionBuilder()
+                .withUrl("/mud").build();
+
+            hubConnection.on("Disconnect", function()
+            {
+                hubConnection.stop();
+            });
+
+            hubConnection.on("ReceiveGameOutput", function(output)
+            {
+                let cons = $("#console");
+                cons.append(output);
+                cons.scrollTop(cons.prop("scrollHeight"));
+            });
+
+            $("#start").click(function()
+            {
+                hubConnection.invoke("AcceptNewUser");
+                $("#start").css("display", "none");
+                $("#input").focus();
+            });
+
+            /* Hotkeys */
+
+            $(document).keydown(function(event)
+            {
+                let numpadNumbers = event.which >= 97 && event.which <= 105;
+                let upArrow = event.which == 38;
+                let downArrow = event.which == 40;
+
+                if (numpadNumbers || upArrow || downArrow)
+                {
+                    if (event.which == 101)
+                    {
+                        hubConnection.invoke("ProcessUserInput", "смотреть");
+                    }
+                    else if (event.which == 104)
+                    {
+                        hubConnection.invoke("ProcessUserInput", "север");
+                    }
+                    else if (event.which == 102)
+                    {
+                        hubConnection.invoke("ProcessUserInput", "восток");
+                    }
+                    else if (event.which == 98)
+                    {
+                        hubConnection.invoke("ProcessUserInput", "юг");
+                    }
+                    else if (event.which == 100)
+                    {
+                        hubConnection.invoke("ProcessUserInput", "запад");
+                    }
+                    else if (event.which == 38)
+                    {
+                        hubConnection.invoke("ProcessUserInput", "вверх");
+                    }
+                    else if (event.which == 40)
+                    {
+                        hubConnection.invoke("ProcessUserInput", "вниз");
+                    }
+                    else if (event.which == 105)
+                    {
+                        hubConnection.invoke("ProcessUserInput", "северо-восток");
+                    }
+                    else if (event.which == 99)
+                    {
+                        hubConnection.invoke("ProcessUserInput", "юго-восток");
+                    }
+                    else if (event.which == 97)
+                    {
+                        hubConnection.invoke("ProcessUserInput", "юго-запад");
+                    }
+                    else if (event.which == 103)
+                    {
+                        hubConnection.invoke("ProcessUserInput", "северо-запад");
+                    }
+                }
+            });
+
+            /* Input */
+
+            $("#input").keydown(function(event)
+            {
+                let numpadNumbers = event.which >= 97 && event.which <= 105;
+                let upArrow = event.which == 38;
+                let downArrow = event.which == 40;
+
+                if (numpadNumbers || upArrow || downArrow)
+                {
+                    event.preventDefault();
+                }
+            });
+
+            $("#input").keyup(function(event)
+            {
+                if (event.keyCode == 13 && this.value.length > 0)
+                {
+                    this.select();
+                    hubConnection.invoke("ProcessUserInput", this.value);
+                }
+            });
+
+            /* Begin */
+
+            hubConnection.start();
+        });
+    </script>
+</body>
+</html>

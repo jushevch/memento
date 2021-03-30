@@ -1,0 +1,22 @@
+.workplace {
+    width: 900px;
+    padding: 20px;
+    margin: 20px auto;
+    border-radius: 0.25rem;
+    background-color: white;
+}
+
+input[type=file] {
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+}
+
+input[type=file]:focus + label {
+    background-color: #e2e6ea;
+    border-color: #dae0e5;
+    box-shadow: 0 0 0 0.2rem rgba(216, 217, 219, 0.5);
+}

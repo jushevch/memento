@@ -1,0 +1,35 @@
+<hr/>
+
+<div class="row">
+    <div class="col-8 form-group">
+        <input class="form-control" type="text"
+            [(ngModel)]="info.title" ngbTooltip="Название" placement="left"/>
+    </div>
+
+    <div class="col-4 form-group">
+        <input class="form-control" type="text"
+            [(ngModel)]="info.author" ngbTooltip="Автор" placement="right"/>
+    </div>
+</div>
+
+<div class="form-group">
+    <textarea class="form-control" rows="5"
+        [(ngModel)]="info.description" ngbTooltip="Описание" placement="left">
+    </textarea>
+</div>
+
+<app-ruler></app-ruler>
+
+<div class="row mt-3">
+    <div class="col form-group mb-0">
+        <input class="form-control" type="number"
+            [(ngModel)]="info.minVnum" (change)="onVnumRangeChanged()"
+            ngbTooltip="Минимальный внум" placement="bottom"/>
+    </div>
+
+    <div class="col form-group mb-0">
+        <input class="form-control" type="number"
+            [(ngModel)]="info.maxVnum" (change)="onVnumRangeChanged()"
+            ngbTooltip="Максимальный внум" placement="bottom"/>
+    </div>
+</div>

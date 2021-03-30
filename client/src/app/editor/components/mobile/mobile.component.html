@@ -1,0 +1,94 @@
+<hr/>
+
+<div class="row">
+    <div class="col-8 form-group">
+        <input class="form-control" type="text"
+            [(ngModel)]="mobile.keywords" ngbTooltip="Ключевые слова" placement="left"/>
+    </div>
+    <div class="col-2">
+        <select class="form-control"
+            (change)="setMobileGender($event.target.value)" ngbTooltip="Род" placement="top">
+
+            <option *ngFor="let gender of genders" [selected]="mobile.gender == gender">
+                {{ gender | genderName }}
+            </option>
+        </select>
+    </div>
+    <div class="col-2 form-group" ngbTooltip="Внум" placement="right">
+        <input class="form-control" type="text" [value]="mobile.vnum" disabled/>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-10 form-group">
+        <input class="form-control" type="text"
+            [(ngModel)]="mobile.look" ngbTooltip="Краткое описание" placement="left"/>
+    </div>
+    <div class="col-2 form-group">
+        <input class="form-control" type="number"
+            [(ngModel)]="mobile.maxPerWorld" ngbTooltip="Максимум в мире" placement="right"/>
+    </div>
+</div>
+
+<div ngbTooltip="Имя по падежам" placement="right">
+    <div class="form-group row">
+        <label class="col-2 col-form-label"><small>Это кто?</small></label>
+        <div class="col-10">
+            <input class="form-control" type="text" [(ngModel)]="mobile.name.nom"/>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-2 col-form-label"><small>Нет кого?</small></label>
+        <div class="col-10">
+            <input class="form-control" type="text" [(ngModel)]="mobile.name.gen"/>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-2 col-form-label"><small>Дать кому?</small></label>
+        <div class="col-10">
+            <input class="form-control" type="text" [(ngModel)]="mobile.name.dat"/>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-2 col-form-label"><small>Ударить кого?</small></label>
+        <div class="col-10">
+            <input class="form-control" type="text" [(ngModel)]="mobile.name.acc"/>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-2 col-form-label"><small>Сражаться с кем?</small></label>
+        <div class="col-10">
+            <input class="form-control" type="text" [(ngModel)]="mobile.name.ins"/>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-2 col-form-label"><small>Думать о ком?</small></label>
+        <div class="col-10">
+            <input class="form-control" type="text" [(ngModel)]="mobile.name.pre"/>
+        </div>
+    </div>
+</div>
+
+<div class="form-group">
+    <textarea class="form-control" rows="4"
+        [(ngModel)]="mobile.description" ngbTooltip="Подробное описание" placement="left">
+    </textarea>
+</div>
+
+<app-ruler></app-ruler>
+
+<table *ngIf="isLocationListVisible()" class="table table-sm mt-3 mb-0 border-bottom">
+    <tr *ngFor="let room of locations">
+        <td>Находится в комнате</td>
+        <td>{{ room.vnum }}&nbsp;
+            <a class="global-link pointer" (click)="editRoom(room.vnum)">
+                {{ room.title | noTitle }}
+            </a>
+        </td>
+    </tr>
+</table>

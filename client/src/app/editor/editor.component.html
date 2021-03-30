@@ -1,0 +1,208 @@
+<div class="workplace">
+
+    <!-- The menu -->
+
+    <div class="row pb-1">
+        <div class="col-9">
+            <button class="btn btn-primary mr-1" [class.btn-light]="currentPanel != 0" (click)="goInfoPanel()">Зона</button>
+            <button class="btn btn-primary mx-1" [class.btn-light]="currentPanel != 1" (click)="goRoomsPanel()">Комнаты</button>
+            <button class="btn btn-primary mx-1" [class.btn-light]="currentPanel != 2" (click)="goItemsPanel()">Предметы</button>
+            <button class="btn btn-primary mx-1" [class.btn-light]="currentPanel != 3" (click)="goMobilesPanel()">Мобы</button>
+        </div>
+
+        <div class="col-3">
+
+            <!-- The file buttons -->
+
+            <div *ngIf="currentPanel == 0" class="text-right">
+                <button class="btn btn-light mr-1" (click)="createArea()">
+                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-file-earmark icon" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M4 0h5.5v1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5h1V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2z"/>
+                        <path d="M9.5 3V0L14 4.5h-3A1.5 1.5 0 0 1 9.5 3z"/>
+                    </svg>
+                </button>
+
+                <div class="d-inline-block mx-1">
+                    <input type="file" id="file" (change)="uploadArea($event.target.files[0])"/>
+                    <label for="file" class="btn btn-light m-0">
+                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-folder2-open icon" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M1 3.5A1.5 1.5 0 0 1 2.5 2h2.764c.958 0 1.76.56 2.311 1.184C7.985 3.648 8.48 4 9 4h4.5A1.5 1.5 0 0 1 15 5.5v.64c.57.265.94.876.856 1.546l-.64 5.124A2.5 2.5 0 0 1 12.733 15H3.266a2.5 2.5 0 0 1-2.481-2.19l-.64-5.124A1.5 1.5 0 0 1 1 6.14V3.5zM2 6h12v-.5a.5.5 0 0 0-.5-.5H9c-.964 0-1.71-.629-2.174-1.154C6.374 3.334 5.82 3 5.264 3H2.5a.5.5 0 0 0-.5.5V6zm-.367 1a.5.5 0 0 0-.496.562l.64 5.124A1.5 1.5 0 0 0 3.266 14h9.468a1.5 1.5 0 0 0 1.489-1.314l.64-5.124A.5.5 0 0 0 14.367 7H1.633z"/>
+                        </svg>
+                    </label>
+                </div>
+
+                <button class="btn btn-light ml-1" (click)="downloadArea()">
+                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-download icon" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+                        <path fill-rule="evenodd" d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- The room editor list buttons -->
+
+            <div *ngIf="currentPanel == 1" class="text-right">
+                <div *ngIf="!currentRoom" class="d-flex flex-row">
+                    <input class="form-control" type="number" [(ngModel)]="userSetRoomVnum" [disabled]="isNewRoomVnumDisabled()" ngbTooltip="Внум" placement="left"/>
+                    <button class="btn btn-light ml-3" [disabled]="isCreateRoomDisabled()" (click)="createRoom()">
+                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-plus-circle icon" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                            <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <div *ngIf="currentRoom">
+                    <button class="btn btn-light mr-1" [disabled]="isPrevRoomDisabled()" (click)="goPrevRoom()">
+                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-left icon" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
+                        </svg>
+                    </button>
+
+                    <button class="btn btn-light mx-1" (click)="clearCurrentRoom()">
+                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-list-ul icon" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M5 11.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm-3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/>
+                        </svg>
+                    </button>
+
+                    <button class="btn btn-light ml-1" [disabled]="isNextRoomDisabled()" (click)="goNextRoom()">
+                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-right icon" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- The item editor list buttons -->
+
+            <div *ngIf="currentPanel == 2" class="text-right">
+                <div *ngIf="!currentItem" class="d-flex flex-row">
+                    <input class="form-control" type="number" [(ngModel)]="userSetItemVnum" [disabled]="isNewItemVnumDisabled()" ngbTooltip="Внум" placement="left"/>
+                    <button class="btn btn-light ml-3" [disabled]="isCreateItemDisabled()" (click)="createItem()">
+                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-plus-circle icon" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                            <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <div *ngIf="currentItem">
+                    <button class="btn btn-light mr-1" [disabled]="isPrevItemDisabled()" (click)="goPrevItem()">
+                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-left icon" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
+                        </svg>
+                    </button>
+
+                    <button class="btn btn-light mx-1" (click)="clearCurrentItem()">
+                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-list-ul icon" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M5 11.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm-3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/>
+                        </svg>
+                    </button>
+
+                    <button class="btn btn-light ml-1" [disabled]="isNextItemDisabled()" (click)="goNextItem()">
+                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-right icon" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- The mob editor list buttons -->
+
+            <div *ngIf="currentPanel == 3" class="text-right">
+                <div *ngIf="!currentMobile" class="d-flex flex-row">
+                    <input class="form-control" type="number" [(ngModel)]="userSetMobileVnum" [disabled]="isNewMobileVnumDisabled()" ngbTooltip="Внум" placement="left"/>
+                    <button class="btn btn-light ml-3" [disabled]="isCreateMobileDisabled()" (click)="createMobile()">
+                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-plus-circle icon" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                            <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <div *ngIf="currentMobile">
+                    <button class="btn btn-light mr-1" [disabled]="isPrevMobileDisabled()" (click)="goPrevMobile()">
+                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-left icon" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
+                        </svg>
+                    </button>
+
+                    <button class="btn btn-light mx-1" (click)="clearCurrentMobile()">
+                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-list-ul icon" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M5 11.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm-3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/>
+                        </svg>
+                    </button>
+
+                    <button class="btn btn-light ml-1" [disabled]="isNextMobileDisabled()" (click)="goNextMobile()">
+                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-right icon" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- The editor panels -->
+
+    <div [ngSwitch]="currentPanel">
+
+        <!-- Area info panel -->
+
+        <div *ngSwitchCase="0">
+            <app-area-info [info]="area.info" (vnumRangeChangedEvent)="setNextVnums()"></app-area-info>
+        </div>
+
+        <!-- Rooms panel -->
+
+        <div *ngSwitchCase="1">
+            <app-room-list *ngIf="!currentRoom" 
+                [area]="area" 
+                [isCloneDisabled]="isCreateRoomDisabled()" 
+                (editRoomEvent)="setCurrentRoom($event)" 
+                (cloneRoomEvent)="cloneRoom($event)" 
+                (roomDeletedEvent)="setNextRoomVnum()">
+            </app-room-list>
+
+            <app-room *ngIf="currentRoom" 
+                [area]="area" [room]="currentRoom" 
+                (goRoomEvent)="setCurrentRoom($event)"
+                (editItemEvent)="editItem($event)"
+                (editMobileEvent)="editMobile($event)">
+            </app-room>
+        </div>
+
+        <!-- Items panel -->
+
+        <div *ngSwitchCase="2">
+            <app-item-list *ngIf="!currentItem" 
+                [area]="area" 
+                [isCloneDisabled]="isCreateItemDisabled()" 
+                (editItemEvent)="setCurrentItem($event)" 
+                (cloneItemEvent)="cloneItem($event)" 
+                (itemDeletedEvent)="setNextItemVnum()">
+            </app-item-list>
+
+            <app-item *ngIf="currentItem" 
+                [area]="area" [item]="currentItem"
+                (editRoomEvent)="editRoom($event)">
+            </app-item>
+        </div>
+
+        <!-- Mobiles panel -->
+
+        <div *ngSwitchCase="3">
+            <app-mobile-list *ngIf="!currentMobile" 
+                [area]="area" 
+                [isCloneDisabled]="isCreateMobileDisabled()" 
+                (editMobileEvent)="setCurrentMobile($event)" 
+                (cloneMobileEvent)="cloneMobile($event)" 
+                (mobileDeletedEvent)="setNextMobileVnum()">
+            </app-mobile-list>
+
+            <app-mobile *ngIf="currentMobile" 
+                [area]="area" [mobile]="currentMobile"
+                (editRoomEvent)="editRoom($event)"></app-mobile>
+        </div>
+    </div>
+</div>

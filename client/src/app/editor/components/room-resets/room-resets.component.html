@@ -1,0 +1,100 @@
+<!-- Add a repop item reset -->
+
+<div class="d-flex flex-row mt-3" *ngIf="areControlsVisible">
+    <div class="flex-grow-1 form-group" ngbTooltip="Добавить предмет" placement="left">
+        <select class="form-control" #itemList [disabled]="area.items.size == 0">
+            <option *ngFor="let kvp of area.items | keyvalue" [value]="kvp.value.vnum">
+                {{ kvp.value.vnum }} &middot; {{ kvp.value.name.nom | noTitle }} &middot; {{ kvp.value.look | noTitle }}
+            </option>
+        </select>
+    </div>
+    <div class="form-group ml-3">
+        <button class="btn btn-light"
+            (click)="createItemReset(itemList.value)" [disabled]="area.items.size == 0">
+
+            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-plus-circle icon" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+            </svg>
+        </button>
+    </div>
+</div>
+
+<!-- Add a repop mobile reset -->
+
+<div class="d-flex flex-row" *ngIf="areControlsVisible">
+    <div class="flex-grow-1 form-group mb-0" ngbTooltip="Добавить моба" placement="left">
+        <select class="form-control" #mobileList [disabled]="area.mobiles.size == 0">
+            <option *ngFor="let kvp of area.mobiles | keyvalue" [value]="kvp.value.vnum">
+                {{ kvp.value.vnum }} &middot; {{ kvp.value.name.nom | noTitle }} &middot; {{ kvp.value.look | noTitle }}
+            </option>
+        </select>
+    </div>
+    <div class="form-group mb-0 ml-3">
+        <button class="btn btn-light"
+            (click)="createMobileReset(mobileList.value)" [disabled]="area.mobiles.size == 0">
+
+            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-plus-circle icon" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+            </svg>
+        </button>
+    </div>
+</div>
+
+<!-- The list of the current resets -->
+
+<table *ngIf="isResetListAvailable()" class="table table-sm mt-3 mb-0 border-bottom">
+
+    <tr *ngFor="let reset of room.itemResets">
+        <td>
+            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-box icon" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" d="M8.186 1.113a.5.5 0 0 0-.372 0L1.846 3.5 8 5.961 14.154 3.5 8.186 1.113zM15 4.239l-6.5 2.6v7.922l6.5-2.6V4.24zM7.5 14.762V6.838L1 4.239v7.923l6.5 2.6zM7.443.184a1.5 1.5 0 0 1 1.114 0l7.129 2.852A.5.5 0 0 1 16 3.5v8.662a1 1 0 0 1-.629.928l-7.185 2.874a.5.5 0 0 1-.372 0L.63 13.09a1 1 0 0 1-.63-.928V3.5a.5.5 0 0 1 .314-.464L7.443.184z"/>
+            </svg>
+        </td>
+
+        <td>{{ reset.item.vnum }}&nbsp;
+            <a class="global-link pointer" (click)="editItem(reset.item.vnum)">
+                {{ reset.item.look | noTitle }}
+            </a>
+        </td>
+
+        <td class="text-right">
+            <div style="margin-right: 0.55rem;">
+                <svg (click)="deleteItemReset(reset.id)"
+                    class="bi bi-x-circle pointer icon" fill="#dc3545" width="1em" height="1em" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+
+                    <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                    <path fill-rule="evenodd" d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                </svg>
+            </div>
+        </td>
+    </tr>
+
+    <tr *ngFor="let reset of room.mobileResets">
+        <td>
+            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-emoji-smile icon" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                <path fill-rule="evenodd" d="M4.285 9.567a.5.5 0 0 1 .683.183A3.498 3.498 0 0 0 8 11.5a3.498 3.498 0 0 0 3.032-1.75.5.5 0 1 1 .866.5A4.498 4.498 0 0 1 8 12.5a4.498 4.498 0 0 1-3.898-2.25.5.5 0 0 1 .183-.683z"/>
+                <path d="M7 6.5C7 7.328 6.552 8 6 8s-1-.672-1-1.5S5.448 5 6 5s1 .672 1 1.5zm4 0c0 .828-.448 1.5-1 1.5s-1-.672-1-1.5S9.448 5 10 5s1 .672 1 1.5z"/>
+            </svg>
+        </td>
+
+        <td>{{ reset.mobile.vnum }}&nbsp;
+            <a class="global-link pointer" (click)="editMobile(reset.mobile.vnum)">
+                {{ reset.mobile.look | noTitle }}
+            </a>
+        </td>
+
+        <td class="text-right">
+            <div style="margin-right: 0.55rem;">
+                <svg (click)="deleteMobileReset(reset.id)"
+                    class="bi bi-x-circle pointer icon" fill="#dc3545" width="1em" height="1em" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+
+                    <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                    <path fill-rule="evenodd" d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                </svg>
+            </div>
+        </td>
+    </tr>
+</table>
